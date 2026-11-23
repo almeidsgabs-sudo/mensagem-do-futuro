@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#07519a">
+<title>Uma Mensagem do Seu Eu do Futuro | UNIFACCAMP</title>
+<style>
+:root{--blue:#07519a;--navy:#07346b;--yellow:#ffc83d;--cream:#fffaf0}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(145deg,#e7f4ff,#fff9e7);color:#17365a;min-height:100vh}
+header{background:linear-gradient(120deg,#064783,#0c75c4);color:white;text-align:center;padding:18px 16px}
+header strong{font-size:22px;letter-spacing:1px}
+header small{display:block;margin-top:5px;letter-spacing:.8px}
+main{max-width:530px;margin:24px auto;padding:0 16px 35px}
+.panel{background:white;border-radius:26px;padding:28px 22px;box-shadow:0 15px 45px #164d8020;text-align:center}
+.pill{display:inline-block;background:#fff1bf;color:#805600;border-radius:40px;padding:8px 15px;font-size:12px;font-weight:bold;letter-spacing:1px}
+h1{font-size:clamp(29px,7vw,43px);line-height:1.1;color:var(--navy);margin:18px 0}
+h1 em{color:#eda900;font-style:normal}
+p{line-height:1.65}
+.subtitle{font-size:15px;color:#526a83}
+.envelope{width:210px;height:145px;margin:28px auto;position:relative;background:#0b69b7;border-radius:8px 8px 15px 15px;box-shadow:0 13px 24px #004a8c30;display:grid;place-items:center;transition:transform .5s}
+.envelope:before{content:"";position:absolute;top:0;left:0;width:0;height:0;border-left:105px solid transparent;border-right:105px solid transparent;border-top:88px solid #328fd3;transform-origin:top;transition:transform .7s;z-index:2}
+.envelope.open:before{transform:rotateX(170deg)}
+.envelope.open{transform:translateY(-8px)}
+.envelope span{font-size:46px;z-index:3;filter:drop-shadow(0 2px 3px #0002)}
+.field{text-align:left;margin:15px 0}
+label{display:block;font-weight:bold;font-size:14px;margin-bottom:7px}
+input{width:100%;padding:14px 16px;border:1.5px solid #cadceb;border-radius:12px;font-size:16px;outline-color:#0b69b7}
+button{border:0;border-radius:14px;padding:16px 18px;background:var(--yellow);color:#123d6c;font-size:16px;font-weight:bold;cursor:pointer;width:100%;margin-top:12px;transition:transform .15s}
+button:active{transform:scale(.97)}
+button.secondary{background:#eaf3fb}
+.hidden{display:none}
+.letter{background:#fffdf5;border:2px solid #f4d883;border-radius:17px;padding:24px 20px;text-align:left;margin-top:20px;position:relative}
+.letter h2{font-size:23px;color:var(--navy);margin:8px 0 14px}
+.letter p{font-size:16px}
+.mission{background:#e8f4ff;border-left:5px solid #f4b800;border-radius:12px;padding:16px;margin:20px 0}
+.mission strong{display:block;margin-bottom:7px}
+.signature{text-align:right;font-style:italic;color:#805e19;margin-top:18px}
+footer{text-align:center;font-size:12px;color:#53708b;margin-top:22px;line-height:1.7}
+.sparkles{font-size:24px}
+@media(max-width:380px){.panel{padding:22px 16px}}
+</style>
+</head>
+<body>
+<header><strong>UNIFACCAMP</strong><small>IV MOSTRA DE EXTENSÃO • ENVELHECIMENTO SAUDÁVEL</small></header>
+<main>
+<section class="panel" id="welcome">
+<span class="pill">💌 UMA SURPRESA PARA VOCÊ</span>
+<h1>Você recebeu uma <em>mensagem do futuro!</em></h1>
+<p class="subtitle">Alguém muito especial quer conversar com você... É o seu eu de daqui a muitos anos!</p>
+<div class="envelope" id="envelope"><span>💛</span></div>
+<div class="field"><label for="nome">Como podemos chamar você?</label><input id="nome" placeholder="Digite seu primeiro nome" maxlength="35" autocomplete="given-name"></div>
+<div class="field"><label for="idade">Quantos anos você tem?</label><input id="idade" type="number" min="1" max="110" placeholder="Sua idade"></div>
+<button id="openBtn">💌 Abrir minha carta do futuro</button>
+<p class="subtitle">Uma experiência sobre escolhas, saúde e o futuro que estamos construindo.</p>
+</section>
+<section class="panel hidden" id="result">
+<span class="pill">✨ CARTA ESPECIAL DO FUTURO</span>
+<div class="sparkles">💌 ✨ 💛</div>
+<div class="letter" id="letter">
+<small id="dateLabel">UMA MENSAGEM DO FUTURO</small>
+<h2 id="greeting"></h2>
+<p id="message"></p>
+<div class="mission"><strong>🎯 Sua missão saudável da semana</strong><span id="mission"></span></div>
+<p class="signature">Com carinho,<br>seu eu do futuro 💛</p>
+</div>
+<button id="saveBtn">📸 Salvar minha carta como imagem</button>
+<button class="secondary" id="againBtn">✨ Sortear outra mensagem</button>
+<button class="secondary" id="backBtn">↩ Voltar ao início</button>
+</section>
+<footer>“O jeito que você vive hoje influencia como vai envelhecer amanhã.”<br>Projeto Envelhecimento Saudável • IV Mostra de Extensão • UNIFACCAMP</footer>
+</main>
+<script>
+const letters=[
+{message:"Oi, {nome}! Aqui é você aos {futuro} anos. Quero agradecer por cada pequeno cuidado que você começou a ter com a nossa saúde. Não precisa fazer tudo perfeitamente. O importante é continuar!",mission:"Faça uma caminhada de 20 minutos, respeitando seus limites."},
+{message:"Ei, {nome}! Sou você aos {futuro} anos. Sabe aquela correria que parece não ter fim? Vim lembrar que descansar também é cuidar de nós. Nossa saúde merece atenção todos os dias.",mission:"Reserve um momento para relaxar e organize uma boa noite de sono."},
+{message:"Surpresa, {nome}! Sou você aos {futuro} anos. As boas conversas e as pessoas queridas fazem parte das minhas melhores lembranças. Cuide dos nossos laços, não apenas da nossa rotina.",mission:"Converse com alguém especial e dedique atenção de verdade a essa pessoa."},
+{message:"Oi, {nome}! Aqui é você aos {futuro} anos. O futuro é cheio de surpresas, mas algumas escolhas de hoje podem ajudar muito. Obrigado por lembrar que cuidar do corpo também é um ato de carinho.",mission:"Inclua uma fruta ou verdura na alimentação de hoje."},
+{message:"Olá, {nome}! Sou você aos {futuro} anos. Quero que saiba que a saúde mental merece tanto cuidado quanto a física. Seja gentil consigo e não tenha vergonha de pedir apoio quando precisar.",mission:"Separe dez minutos para fazer algo que traga tranquilidade."},
+{message:"Ei, {nome}! Sou você aos {futuro} anos. Vim dizer que envelhecer é continuar aprendendo, criando memórias e descobrindo possibilidades. Cuide de nós com paciência e constância.",mission:"Escolha um hábito saudável pequeno e pratique durante sete dias."},
+{message:"Oi, {nome}! Aqui é você aos {futuro} anos. Lembre-se de que beber água, movimentar o corpo e respeitar o descanso são gestos simples que podem fazer diferença com o tempo.",mission:"Mantenha água por perto e lembre-se de se hidratar ao longo do dia."},
+{message:"Querido(a) {nome}, sou você aos {futuro} anos. Obrigado por não esperar a idade chegar para pensar na nossa qualidade de vida. O melhor momento para começar a se cuidar pode ser hoje.",mission:"Convide alguém para fazer uma atividade saudável com você nesta semana."}
+];
+let current=-1,visitor="",futureAge=80;
+const el=id=>document.getElementById(id);
+function randomLetter(){
+let n=Math.floor(Math.random()*letters.length);
+if(n===current)n=(n+1)%letters.length;
+current=n;
+const item=letters[n];
+el("greeting").textContent="Olá, "+visitor+"! 💛";
+el("message").textContent=item.message.replaceAll("{nome}",visitor).replaceAll("{futuro}",futureAge);
+el("mission").textContent=item.mission;
+}
+el("openBtn").addEventListener("click",()=>{
+const name=el("nome").value.trim().replace(/\s+/g," ");
+const age=Number(el("idade").value);
+if(!name){alert("Digite seu nome para receber sua carta! 💛");el("nome").focus();return}
+if(!Number.isInteger(age)||age<1||age>110){alert("Digite uma idade válida, entre 1 e 110.");el("idade").focus();return}
+visitor=name;
+futureAge=age<70?80:Math.min(110,age+10);
+el("envelope").classList.add("open");
+el("openBtn").disabled=true;
+setTimeout(()=>{
+randomLetter();
+el("welcome").classList.add("hidden");
+el("result").classList.remove("hidden");
+window.scrollTo({top:0,behavior:"smooth"});
+el("openBtn").disabled=false;
+},650);
+});
+el("againBtn").addEventListener("click",randomLetter);
+el("backBtn").addEventListener("click",()=>{
+el("result").classList.add("hidden");
+el("welcome").classList.remove("hidden");
+el("envelope").classList.remove("open");
+window.scrollTo({top:0,behavior:"smooth"});
+});
+el("saveBtn").addEventListener("click",()=>{
+const canvas=document.createElement("canvas");canvas.width=900;canvas.height=1200;
+const ctx=canvas.getContext("2d");
+ctx.fillStyle="#07519a";ctx.fillRect(0,0,900,1200);
+ctx.fillStyle="#fffdf5";ctx.beginPath();ctx.roundRect(48,48,804,1104,30);ctx.fill();
+ctx.textAlign="center";ctx.fillStyle="#07519a";ctx.font="bold 29px Arial";ctx.fillText("UNIFACCAMP • IV MOSTRA DE EXTENSÃO",450,115);
+ctx.fillStyle="#b27c00";ctx.font="bold 37px Arial";ctx.fillText("UMA CARTA DO SEU EU DO FUTURO",450,184);
+ctx.textAlign="left";ctx.fillStyle="#07346b";ctx.font="bold 35px Arial";ctx.fillText("Olá, "+visitor+"!",95,260);
+function wrap(text,x,y,maxWidth,lineHeight,font,color){
+ctx.font=font;ctx.fillStyle=color;
+let words=text.split(" "),line="";
+for(let i=0;i<words.length;i++){
+const test=line+words[i]+" ";
+if(ctx.measureText(test).width>maxWidth&&line){ctx.fillText(line,x,y);y+=lineHeight;line=words[i]+" "}
+else line=test;
+}ctx.fillText(line,x,y);return y+lineHeight;
+}
+let y=wrap(el("message").textContent,95,330,710,48,"28px Arial","#17365a");
+y+=32;ctx.fillStyle="#e8f4ff";ctx.beginPath();ctx.roundRect(85,y-32,730,230,20);ctx.fill();
+ctx.font="bold 30px Arial";ctx.fillStyle="#07519a";ctx.fillText("SUA MISSÃO SAUDÁVEL",110,y+15);
+wrap(el("mission").textContent,110,y+70,665,40,"26px Arial","#17365a");
+ctx.textAlign="center";ctx.font="italic 27px Arial";ctx.fillStyle="#946c00";ctx.fillText("Com carinho, seu eu do futuro.",450,1040);
+ctx.font="21px Arial";ctx.fillStyle="#07519a";ctx.fillText("O jeito que você vive hoje influencia seu amanhã.",450,1100);
+const a=document.createElement("a");a.download="minha-carta-do-futuro.png";a.href=canvas.toDataURL("image/png");a.click();
+});
+</script>
+</body>
+</html>
